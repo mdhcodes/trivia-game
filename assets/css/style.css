@@ -1,0 +1,78 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 960px;
+  margin: 30px auto;
+  text-align: center;
+  border: 5px solid #f7df1e;
+}
+
+header {
+  text-align: center;
+  margin: 50px 0 0;
+  padding: 30px 0 0;
+}
+
+#start,
+#finished,
+#restart-button {
+  margin: 100px 0 0;
+  width: 200px;
+  height: 80px;
+  font-size: 1.5em;
+  border: none;
+  background-color: #f7df1e;
+}
+
+#start {
+  margin: 200px 0 0;
+}
+
+#start:hover,
+#finished:hover,
+#restart-button:hover {
+  cursor: pointer;
+}
+
+span {
+  background-color: #f7df1e;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.25em;
+}
+
+#count-down {
+  margin-top: 50px;
+  height: 50px;
+}
+
+#message {
+  margin-top: 20px;
+}
+
+.question {
+  margin-top: 40px;
+}
+
+.question h2 {
+  font-weight: 700;
+}
+
+#results {
+  margin-top: 20px;
+}
