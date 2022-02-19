@@ -5,10 +5,11 @@ body {
 }
 
 main {
-  max-width: 960px;
+  max-width: 1000px;
   margin: 2em auto;
   text-align: center;
   border: 5px solid #f7df1e;
+  padding: 2em;
 }
 
 header {
@@ -56,8 +57,12 @@ h2 {
 }
 
 .questions {
-  margin-top: 2em;
-  margin-bottom: 2em; 
+  margin-top: 1.5em;
+  margin-bottom: 2em;
+}
+
+.input-size {
+  font-size: .5em;
 }
 
 .space {

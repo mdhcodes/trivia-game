@@ -68,18 +68,13 @@
   let numAnswersBlank = 0;
   let index = 0;
 
-
   const startQuiz = startButton.addEventListener('click', () => {
     quiz();
   });
 
-
   const nextQuestion = nextButton.addEventListener('click', () => {
 
-    nextButton.style.display = 'none';
     let userChoice = document.querySelector('input[value]:checked').value;
-    // console.log(userChoice);
-    console.log(userChoice, trivia[index-1].answers[trivia[index-1].correctAnswer]);
 
     // Record answers
     if (userChoice === undefined) {
@@ -105,10 +100,11 @@
     triviaAnswers.textContent = "";
     // Remove startButton
     startButton.remove();
+    // Display nextButton
     nextButton.style.display = 'inline-block';
 
     const quizLength = trivia.length;
-
+    // displayQuestion will be executed for each object (question) in the trivia array
     if (index < quizLength) {
       triviaQuestions.textContent = `${index + 1}. ${trivia[index].question}`;
 
@@ -121,6 +117,7 @@
       const answerInput1 = document.createElement('input');
       answerInput1.setAttribute('type', 'radio');
       answerInput1.setAttribute('name', index);
+      answerInput1.setAttribute('class', 'input-size');
       answerInput1.setAttribute('value', trivia[index].answers.a);
 
       const question2AnswerDiv = document.createElement('div');
@@ -172,6 +169,11 @@
       question4AnswerDiv.appendChild(answerLabel4);
       triviaAnswers.append(question4AnswerDiv);
 
+      const message1 = document.createElement('p');
+      message1.textContent = 'Please select an answer before clicking "Next".'
+      message1.style.marginTop = '3em';
+      triviaAnswers.append(message1);
+
       index++;
 
     } else {
@@ -179,22 +181,26 @@
       nextButton.style.display = 'none';
 
       // Display results
-      let message = document.createElement('h2');
-      let correctResults = document.createElement('p');
-      let incorrectResults = document.createElement('p');
-      let emptyResults = document.createElement('p');
+      const message2 = document.createElement('h2');
+      const score = document.createElement('p');
+      const correctResults = document.createElement('p');
+      const incorrectResults = document.createElement('p');
+      const message3 = document.createElement('h2');
 
-      message.textContent = 'All Done! Here are your results.';
+      message2.textContent = 'All Done! Here are your results.';
+      score.textContent = 'Score: ' + (numAnswersCorrect / quizLength) * 100 + '\u0025';
       correctResults.textContent = 'Correct Answers: ' + numAnswersCorrect;
       incorrectResults.textContent = 'Incorrect Answers: ' + numAnswersIncorrect;
-      emptyResults.textContent = 'Unanswered: ' + numAnswersBlank;
+      message3.textContent = 'Thank you for participating!';
 
-      mainSection.append(message);
+      mainSection.append(message2);
+      mainSection.append(score);
       mainSection.append(correctResults);
       mainSection.append(incorrectResults);
-      mainSection.append(emptyResults);
+      mainSection.append(message3);
 
-      emptyResults.style.marginBottom = '100px';
+      message3.style.marginTop = '2em';
+      message3.style.marginBottom = '2em';
 
     }
 
@@ -206,12 +212,3 @@
     displayQuestion();
 
   }; // end quiz()
-
-
-
-  /*-----------------------------------------------------------------------------------------------------------------------*/
-  /* The quiz only works when all questions are answered - If question left unanswered, quiz crashes with following error: */
-  /* Uncaught TypeError: document.querySelector(...) is null */
-  /* No timed features yet
-  /* Maybe I could implement a SKIP question if the user doesn't know - NOT IDEAL */
-  /*-----------------------------------------------------------------------------------------------------------------------*/
