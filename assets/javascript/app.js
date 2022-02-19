@@ -57,37 +57,59 @@
   // Global Variables
 
   const mainSection = document.getElementById('main');
-  // const countDownTimer = document.getElementById('count-down');
+  const timer = document.getElementById('time');
   const triviaQuestions = document.getElementById('questions');
   const triviaAnswers = document.getElementById('answers');
   const startButton = document.getElementById('start');
   const nextButton = document.getElementById('next');
 
+
+  const quizLength = trivia.length;
+  let time2Complete = 0;
+  let intervalId;
+  let finished = false;
   let numAnswersCorrect = 0;
   let numAnswersIncorrect = 0;
   let numAnswersBlank = 0;
   let index = 0;
 
+  // Track the amount of time the user needed to complete the quiz
+  const countUp = () => {
+
+    time2Complete++;
+    timer.textContent = 'Time to Complete: ' + time2Complete + ' seconds';
+
+    if (finished) {
+      clearInterval(intervalId);
+      if (time2Complete < 59) {
+        timer.textContent = 'You finished in approximately: ' + time2Complete + ' seconds';
+      } else {
+        timer.textContent = 'You finished in approximately: ' + time2Complete/60 + ' minutes';
+      }
+
+    }
+
+  };
+
+
   const startQuiz = startButton.addEventListener('click', () => {
-    quiz();
+
+    intervalId = setInterval(countUp, 1000);
+    displayQuestion();
+
   });
+
 
   const nextQuestion = nextButton.addEventListener('click', () => {
 
     let userChoice = document.querySelector('input[value]:checked').value;
 
     // Record answers
-    if (userChoice === undefined) {
-      numAnswersBlank++;
-      console.log('numAnswersBlank', numAnswersBlank);
-      displayQuestion();
-    } else if (userChoice === trivia[index-1].answers[trivia[index-1].correctAnswer]) {
+    if (userChoice === trivia[index-1].answers[trivia[index-1].correctAnswer]) {
       numAnswersCorrect++;
-      console.log('numAnswersCorrect', numAnswersCorrect);
       displayQuestion();
     } else {
       numAnswersIncorrect++;
-      console.log('numAnswersIncorrect', numAnswersIncorrect);
       displayQuestion();
     }
 
@@ -103,7 +125,6 @@
     // Display nextButton
     nextButton.style.display = 'inline-block';
 
-    const quizLength = trivia.length;
     // displayQuestion will be executed for each object (question) in the trivia array
     if (index < quizLength) {
       triviaQuestions.textContent = `${index + 1}. ${trivia[index].question}`;
@@ -178,6 +199,7 @@
 
     } else {
 
+      finished = true;
       nextButton.style.display = 'none';
 
       // Display results
@@ -186,29 +208,61 @@
       const correctResults = document.createElement('p');
       const incorrectResults = document.createElement('p');
       const message3 = document.createElement('h2');
+      const retakeQuiz = document.createElement('button');
+      const endQuiz = document.createElement('button');
 
       message2.textContent = 'All Done! Here are your results.';
       score.textContent = 'Score: ' + (numAnswersCorrect / quizLength) * 100 + '\u0025';
       correctResults.textContent = 'Correct Answers: ' + numAnswersCorrect;
       incorrectResults.textContent = 'Incorrect Answers: ' + numAnswersIncorrect;
-      message3.textContent = 'Thank you for participating!';
+      retakeQuiz.setAttribute('class', 'btn');
+      retakeQuiz.textContent = 'Restart';
+      endQuiz.setAttribute('class', 'btn');
+      endQuiz.textContent = 'End';
+
+      retakeQuiz.style.marginRight = '.5em';
+      endQuiz.style.marginLeft = '.5em';
 
       mainSection.append(message2);
       mainSection.append(score);
       mainSection.append(correctResults);
       mainSection.append(incorrectResults);
-      mainSection.append(message3);
+      mainSection.append(retakeQuiz);
+      mainSection.append(endQuiz);
 
-      message3.style.marginTop = '2em';
-      message3.style.marginBottom = '2em';
+
+      retakeQuiz.addEventListener('click', () => {
+
+        finished = false;
+        time2Complete = 0;
+        index = 0;
+        numAnswersCorrect = 0;
+        numAnswersIncorrect = 0;
+        retakeQuiz.remove();
+        endQuiz.remove();
+        message2.remove();
+        score.remove();
+        correctResults.remove();
+        incorrectResults.remove();
+
+        intervalId = setInterval(countUp, 1000);
+        displayQuestion();
+
+      });
+
+
+      endQuiz.addEventListener('click', () => {
+
+        retakeQuiz.remove();
+        endQuiz.remove();
+
+        mainSection.append(message3);
+        message3.style.marginTop = '2em';
+        message3.style.marginBottom = '2em';
+        message3.textContent = 'Thank you for participating!';
+
+      });
 
     }
 
   };
-
-
-  const quiz = () => {
-
-    displayQuestion();
-
-  }; // end quiz()
